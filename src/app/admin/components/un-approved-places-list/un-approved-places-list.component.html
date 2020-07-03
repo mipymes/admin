@@ -1,0 +1,36 @@
+<!-- <mat-form-field>
+    <mat-label>Buscar...!</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Buscar...!">
+  </mat-form-field> -->
+<table mat-table [dataSource]="unApprovedPlaces$ | async" class="mat-elevation-z8 un-approved-places-table">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let place"> {{place.name}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Descripción </th>
+        <td mat-cell *matCellDef="let place"> {{place.description}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="approved">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let place"> {{(place.approved) ? 'Aprobado' : 'No Aprobado'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let place">
+            <a mat-raised-button color="primary" [routerLink]="['edit', place.id]">Editar</a>
+            <!-- <button mat-raised-button color="warn">Eliminar</button> -->
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

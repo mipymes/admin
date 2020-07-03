@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "mipymes-app": {
+      "hosting": {
+        "mipymes-admin": [
+          "mipymes-app"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "mipymes-app"
+  }
+}

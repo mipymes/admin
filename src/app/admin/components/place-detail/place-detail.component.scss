@@ -1,0 +1,11 @@
+mat-card-header{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    mat-slide-toggle{
+        justify-self: end;
+    }
+}
+
+agm-map {
+    height: 300px;
+}

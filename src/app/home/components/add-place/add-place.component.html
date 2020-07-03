@@ -1,0 +1,151 @@
+<form [formGroup]="placeForm">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Agregar Nuevos Negocios</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="m-t-10">
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Nombre del Negocio</mat-label>
+            <input matInput placeholder="Nombre del Negocio" formControlName="name">
+            <mat-error *ngIf="placeForm.get('name').getError('required')
+                   && (placeForm.get('name').touched  || placeForm.get('name').dirty)">
+              El nombre del negocio es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Número de Teléfono</mat-label>
+            <input matInput placeholder="Número de Teléfono" formControlName="phone">
+            <mat-error *ngIf="placeForm.get('phone').getError('required')
+            && (placeForm.get('phone').touched  || placeForm.get('phone').dirty)">
+              El número de teléfono del es requerido
+            </mat-error>
+            <mat-error *ngIf="placeForm.get('phone').getError('numberIsInvalid')
+            && (placeForm.get('phone').touched  || placeForm.get('phone').dirty)">
+              El número de teléfono tiene un formato incorrecto
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <mat-form-field class="w-100">
+            <mat-label>Descripción Del Negocio</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5" formControlName="description"></textarea>
+            <mat-error *ngIf="placeForm.get('description').getError('required')
+              && (placeForm.get('description').touched  || placeForm.get('description').dirty)">
+              La descripción del negocio es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <mat-form-field class="w-100">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="categories">
+              <mat-option [value]="category.id" *ngFor="let category of categories$ | async">{{category.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="placeForm.get('categories').getError('required')
+            && (placeForm.get('categories').touched  || placeForm.get('categories').dirty)">
+              La Categoría del negocio es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <mat-form-field class="w-100">
+            <mat-label>Url FanPage</mat-label>
+            <input matInput placeholder="Url FanPage" formControlName="facebookUrl">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <mat-form-field class="w-100">
+            <mat-label>Url Instagram Page</mat-label>
+            <input matInput placeholder="Url Instagram Page" formControlName="instagramUrl">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row m-t-10">
+        <div class="col-xs-12">
+          <mat-slide-toggle color="primary" formControlName="delivery">
+            Tiene envío a domicilio?
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div class="row m-t-10">
+        <div class="col-xs-12 col-md-6">
+          <h4>Horarios</h4>
+          <table>
+            <tr>
+              <th></th>
+              <th>Apertura</th>
+              <th>Cierre</th>
+            </tr>
+            <ng-container formArrayName="schedules">
+              <tr *ngFor="let schedule of schedules.controls; let i=index" [formGroupName]="i">
+                <ng-container>
+                  <td>{{getDay(i) }}</td>
+                  <td>
+                    <div class="ngx-timepicker-field">
+                      <ngx-timepicker-field [controlOnly]="true" [disabled]="!schedules.controls[i].value['status']"
+                        formControlName="open" [defaultTime]="'8:00 am'"></ngx-timepicker-field>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ngx-timepicker-field">
+                      <ngx-timepicker-field [controlOnly]="true" [disabled]="!schedules.controls[i].value['status']"
+                        formControlName="close" [defaultTime]="'8:00 pm'"></ngx-timepicker-field>
+                    </div>
+                  </td>
+                  <td>
+                    <mat-slide-toggle color="primary" formControlName="status">
+                      {{(schedules.controls[i].value['status']) ? 'Abierto' : 'Cerrado'}}
+                    </mat-slide-toggle>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </table>
+        </div>
+        <div class="col-xs-12 col-md-6">
+
+        </div>
+      </div>
+      <div class="row m-t-10" formGroupName="location">
+        <div class="col-xs-12">
+          <mat-form-field class="w-100">
+            <mat-label>Dirección</mat-label>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5" formControlName="address"></textarea>
+            <mat-error *ngIf="placeForm.controls['location'].get('address').getError('required')
+              && (placeForm.controls['location'].get('address').touched  || placeForm.controls['location'].get('address').dirty)">
+              La dirección del negocio es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12">
+          <app-dragable-marker-map (locationGeoPoint)="getlocationGeoPoint($event)"></app-dragable-marker-map>
+          <mat-error *ngIf="placeForm.controls['location'].get('geopoint').getError('required')">
+         Debe seleccionar una ubicación en el mapa
+        </mat-error>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="row">
+        <div class="col-xs-offset-9 col-xs-3 text-right">
+          <!-- [disabled]="placeForm.invalid" -->
+          <button  [disabled]="placeForm.invalid" (click)="sendPlace()" mat-raised-button color="primary">Enviar</button>
+          <mat-error *ngIf="placeForm.invalid">
+             Debe completar el formulario para enviar
+           </mat-error>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>
