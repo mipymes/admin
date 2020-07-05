@@ -14,10 +14,10 @@ import { AgmCoreModule } from '@agm/core';
     MaterialModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDsq27YYY2cXmP2qeOPGMpYvzzdUZ9bvQc',
+      apiKey: '',
       libraries: ['places']
     })
-    
+
   ],
   exports:[
     HeaderComponent,
